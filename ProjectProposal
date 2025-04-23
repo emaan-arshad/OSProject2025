@@ -1,9 +1,21 @@
-# 📄 Project Proposal: Multi-Quality Parallel Video Streaming Server
 
-## 🧪 Course: Operating Systems  
+
+**FAST-NUCES Karachi**  
+**Department of Computer Science**  
+**Operating Systems – Spring 2025**  
+
+---
+
+### **Project Proposal**
+
+**Project Title:**  
+**Multi-Quality Parallel Video Streaming Server**
+
+**Course:** Operating Systems  
 **Instructor(s):** Ms. Saeeda & Ms. Khadija  
 **Semester:** Spring 2025  
-**Team Members:**
+
+**Group Members:**  
 - Emaan Arshad (23I2560)  
 - Dania Khan (23K0072)  
 - Tanisha Kataria (23K0067)  
@@ -11,110 +23,86 @@
 
 ---
 
-## 📝 Project Title  
-**Multi-Quality Parallel Video Streaming Server**  
-*A real-time simulation of a concurrent streaming platform using Producer-Consumer, Reader-Writer, and Dining Philosophers synchronization models.*
+### **Problem Statement:**  
+Modern video streaming platforms like YouTube and Netflix rely heavily on concurrent systems to serve video content to multiple users in different qualities. This process, if not synchronized correctly, can lead to problems such as corrupted streams, race conditions, and inefficient performance. Our project aims to simulate a multi-threaded video streaming server in C that demonstrates the effective use of Operating Systems concepts like the Producer-Consumer problem, Reader-Writer problem, and Dining Philosophers problem.
+
+The server will concurrently stream different video qualities (240p, 480p, 720p) to five clients, demonstrating real-world parallel processing and synchronization techniques.
 
 ---
 
-## 🎯 Problem Statement  
-In real-world streaming platforms like YouTube or Netflix, ensuring smooth delivery of video chunks to multiple users with different quality requirements demands precise concurrency management. Improper synchronization in such systems can result in race conditions, deadlocks, or corrupted data streams.
-
-Our project aims to simulate such a system by building a multi-threaded video streaming server in C, incorporating real-time playback for multiple users with different resolution streams. This project explores synchronization primitives and classical OS problems applied in a streaming context.
-
----
-
-## 🌟 Objectives
-
+### **Objectives:**  
 - Stream video chunks concurrently to multiple clients.
-- Implement the Producer-Consumer problem with a shared bounded buffer.
-- Address mutual exclusion using Reader-Writer synchronization.
-- Simulate bandwidth/resource constraints using Dining Philosophers.
-- Track performance via real-time logs and leaderboards.
-- Gain hands-on experience with POSIX threads, semaphores, and FIFOs.
+- Simulate multiple classical OS problems (Producer-Consumer, Reader-Writer, Dining Philosophers).
+- Implement shared memory and synchronization using threads, semaphores, and mutexes.
+- Display real-time logs and leaderboards for chunk consumption.
+- Enhance understanding of concurrency control in multi-threaded systems.
 
 ---
 
-## 🔧 Tools & Technologies
-
-| Component            | Details                                     |
-|---------------------|---------------------------------------------|
-| Language            | C (POSIX Threads)                           |
-| OS Concepts         | Threads, Mutex, Semaphores, Shared Memory   |
-| Multimedia Tools    | `ffmpeg`, `mpv` for video processing        |
-| Shell Scripts       | Bash (`setup.sh`, `cleanup.sh`)             |
-| Platform            | Ubuntu 20.04 (VirtualBox)                   |
-| Debugging Tools     | GDB, Valgrind                               |
+### **Tools & Technologies:**  
+- Programming Language: C (with POSIX threads)  
+- Operating System: Ubuntu 20.04 (in VirtualBox)  
+- Synchronization: Mutex, Semaphore, Shared Memory  
+- Multimedia Tools: `ffmpeg`, `mpv` (media player)  
+- Scripts: Shell Scripts (`setup.sh`, `cleanup.sh`, `chunker.sh`)  
+- Debugging: GDB, Valgrind  
 
 ---
 
-## 🧱 Architecture Overview
+### **Project Architecture:**
 
-- **Producer Thread**: Loads video chunks into a shared bounded buffer.
-- **Multiple Consumer Threads**: Read chunks from buffer, send to `mpv` for playback via FIFO pipes.
-- **Chunking Script**: Uses `ffmpeg` to divide videos into `.ts` chunks in 240p, 480p, and 720p.
-- **Logs & Leaderboard**: Maintains a real-time log of events and a summary of consumer performance.
-- **Synchronization**:
-  - Mutex & Semaphores for Producer-Consumer problem
-  - Reader-Writer problem to avoid buffer modification conflicts
-  - Dining Philosophers to simulate bandwidth/resource contention
+1. **Chunk Generator**  
+   - Uses `ffmpeg` to split video into chunks (.ts files) in 240p, 480p, and 720p.
 
----
+2. **Producer Thread**  
+   - Loads chunks into a shared bounded buffer with a capacity of 10.
 
-## 💡 Key Features
+3. **Consumer Threads**  
+   - Five threads simulate five clients consuming different quality chunks from the buffer and playing them via `mpv`.
 
-- Playback of video chunks in multiple resolutions.
-- Thread-safe producer-consumer buffer (bounded to 10 chunks).
-- Dynamic logging with timestamps.
-- Real-time leaderboard of chunk consumption.
-- Support for 5 concurrent consumer threads.
-- Controlled shutdown and resource cleanup.
+4. **FIFO Implementation**  
+   - Named pipes connect the server to the media player for chunk playback.
 
----
+5. **Logging and Leaderboard**  
+   - Logs every read/write operation with timestamps.  
+   - Generates a leaderboard summarizing chunks consumed by each consumer.
 
-## 🧠 Classical OS Problems Implemented
-
-| Problem               | Implementation Detail                                        |
-|----------------------|-------------------------------------------------------------|
-| Producer-Consumer     | Bounded buffer of video chunks, protected with semaphores.  |
-| Reader-Writer         | Preventing concurrent writes when reading from buffer.      |
-| Dining Philosophers   | Simulated bandwidth control using limited consumer tokens.  |
+6. **Classical Problems Used:**
+   - **Producer-Consumer** – Synchronizes chunk loading and reading.  
+   - **Reader-Writer** – Ensures buffer reads and writes don’t overlap dangerously.  
+   - **Dining Philosophers** – Simulates limited network bandwidth/resources.
 
 ---
 
-## 📈 Expected Outcomes
-
-- Functional real-time video streaming with concurrency control.
-- A robust multi-threaded C program demonstrating advanced OS concepts.
-- Visual and textual insight into synchronization behavior.
-- Reusable code and documentation for future learning and development.
-
----
-
-## 🏁 Timeline
-
-| Week      | Milestone                                  |
-|-----------|---------------------------------------------|
-| Week 1    | Problem definition, chunking scripts ready  |
-| Week 2    | Producer-consumer implementation complete   |
-| Week 3    | FIFO + playback + basic logging             |
-| Week 4    | Classical problems integration & testing    |
-| Week 5    | Final refinements, logging, and packaging   |
+### **Expected Outcomes:**
+- A fully functional real-time video streaming server with synchronized concurrency.
+- Accurate and informative log files and leaderboard statistics.
+- Clear demonstration of classical OS synchronization problems in action.
+- Source code that is educational, reusable, and robust.
 
 ---
 
-## 📂 Deliverables
+### **Timeline:**
 
-- `video_server.c` – Full C implementation with threads & logic  
-- `setup.sh` & `cleanup.sh` – Shell scripts for automation  
-- `video_chunker.sh` – Generates required video chunks  
-- `server_log.txt` & `leaderboard.txt` – Logs and statistics  
-- Documentation (README, Proposal, Code Comments)  
+| Week      | Task Description                              |
+|-----------|-----------------------------------------------|
+| Week 1    | Topic finalization, chunker script creation    |
+| Week 2    | Producer-Consumer implementation               |
+| Week 3    | FIFO communication and playback integration    |
+| Week 4    | Classical problem implementation and testing   |
+| Week 5    | Logging, performance testing, documentation    |
+
+---
+
+### **Deliverables:**
+- Source Code: `video_server.c`, `chunker.sh`, `setup.sh`, `cleanup.sh`
+- Input Files: Sample videos and chunked files
+- Output Files: `server_log.txt`, `leaderboard.txt`
+- Project Documentation: Proposal, Readme, and final report
 
 ---
 
-## 🔚 Conclusion
+### **Conclusion:**  
+This project aims to bridge the gap between theoretical operating systems concepts and their real-world application by simulating a video streaming server. It offers a comprehensive learning opportunity by integrating thread management, memory synchronization, inter-process communication, and classical OS problems. This not only enriches our understanding but prepares us for concurrent system challenges in the industry.
 
-This project serves as a practical deep dive into OS-level concurrency. It connects real-world video streaming challenges with academic OS models like Producer-Consumer and Reader-Writer, providing us with a comprehensive learning experience while contributing reusable, educational software.
-
----
+-
