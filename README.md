@@ -11,7 +11,7 @@
 - Emaan Arshad (23I2560)  
 - Dania Khan (23K0072)  
 - Tanisha Kataria (23K0067)  
-- Zunaira Amjad (23K0013)  
+- Zunaira Amjad (23K0013)
 
 ---
 
