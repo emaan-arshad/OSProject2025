@@ -18,6 +18,7 @@ typedef struct {
     char name[128];
     char* data;
     size_t size;
+    int priority; // lower number = higher priority //just ur quality
 } VideoChunk;
 
 VideoChunk* buffer[BUFFER_SIZE];
@@ -123,6 +124,9 @@ void* producer(void* arg) {
                     continue;
                 }
 
+                // Assign priority: 720 -> 0, 480 -> 1, 240 -> 2
+                chunk->priority = MAX_QUALITIES - 1 - q;
+
                 struct timeval tv;
                 gettimeofday(&tv, NULL);
                 char log_msg[256];
@@ -131,9 +135,21 @@ void* producer(void* arg) {
 
                 sem_wait(&empty);
                 pthread_mutex_lock(&mutex);
-                buffer[in] = chunk;
+
+                // Priority insertion
+                int temp = in;
+                int idx = in;
+                while (temp != out) {
+                    int prev = (temp - 1 + BUFFER_SIZE) % BUFFER_SIZE;
+                    if (buffer[prev] == NULL || buffer[prev]->priority <= chunk->priority)
+                        break;
+                    buffer[temp] = buffer[prev];
+                    temp = prev;
+                }
+                buffer[temp] = chunk;
                 in = (in + 1) % BUFFER_SIZE;
                 total_chunks_produced++;
+
                 pthread_mutex_unlock(&mutex);
                 sem_post(&full);
 
@@ -148,7 +164,7 @@ void* producer(void* arg) {
     pthread_mutex_unlock(&mutex);
 
     for (int i = 0; i < MAX_CONSUMERS; i++)
-        sem_post(&full); // wake all consumers if waiting
+        sem_post(&full);
 
     pthread_exit(NULL);
 }
